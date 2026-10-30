@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build KIM tape",
+      "type": "shell",
+      "command": "mkdir -p build && ca65 --cpu 6502 -l \"build/${fileBasenameNoExtension}.lst\" -o \"build/${fileBasenameNoExtension}.o\" \"${relativeFile}\" && ld65 -C kim.cfg -o \"build/${fileBasenameNoExtension}.bin\" \"build/${fileBasenameNoExtension}.o\" && srec_cat \"build/${fileBasenameNoExtension}.bin\" -binary -offset 0x0200 -o \"build/${fileBasenameNoExtension}.tape\" -MOS_Technologies",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": {
+        "owner": "ca65",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.+?)\\((\\d+)\\): (Error|Warning): (.*)$",
+          "file": 1,
+          "line": 2,
+          "severity": 3,
+          "message": 4
+        }
+      }
+    }
+  ]
+}
