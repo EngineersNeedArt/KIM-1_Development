@@ -114,7 +114,7 @@ show_digit:
         lda #$30                ; digit-on delay
         sta T64_NOIRQ           ; U3 timer: /64, no IRQ
 wait:
-        lda TIMER_FLAG           ; timed out yet?
+        lda TIMER_FLAG          ; timed out yet?
         beq wait                ; no
 
         lda #$00                ; blank the segments
