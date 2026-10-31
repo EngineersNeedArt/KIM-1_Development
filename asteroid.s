@@ -56,7 +56,7 @@ flash_loop:
 
         jsr KEYIN               ; set directional regs
         jsr GETKEY              ; get keyboard entry
-        cmp #KEY_NONE            ; valid key?
+        cmp #KEY_NONE           ; valid key?
         bpl main_loop           ; no
         cmp #$00                ; key 0?
         beq go_left
