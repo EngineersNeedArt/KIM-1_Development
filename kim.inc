@@ -102,7 +102,7 @@ KEY_DA   = $11
 KEY_PLUS = $12
 KEY_GO   = $13
 KEY_PC   = $14
-KEY_NONE = $15          ; GETKEY value when no key is down
+KEY_NONE = $15           ; GETKEY value when no key is down
 
 ; ---- Program start used by the build ($0200-$03FF is the usual area) ----
 PROGRAM_ORG = $0200
