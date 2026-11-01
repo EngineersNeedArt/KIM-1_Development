@@ -31,12 +31,6 @@
 ; TEMP ($FC), which is why display saves Y there first.
 OUTSEG          = $1F4E         ; CONVD + 6
 
-; ---- Keypad codes returned by GETKEY (KEY_NONE is in kim.inc) --------
-KEY_DA          = $11
-KEY_PLUS        = $12
-KEY_GO          = $13
-KEY_PC          = $14
-
 ; ---- Zero page: program variables -----------------------------------
 ; (The monitor owns $EF-$FF, but TEMP at $FC is shared with display.)
 play_no         = $b5           ; number of the current play, 1-9
