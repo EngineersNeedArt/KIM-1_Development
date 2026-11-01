@@ -95,6 +95,7 @@ OUTPUT   = $1F4E         ; mid-routine entry into CONVD ($1F48), not a
                          ; from TEMP ($FC) -- caller must STY TEMP first
 KEYIN    = $1F40         ; key pressed? (A <> 0)
 GETKEY   = $1F6A         ; key code -> A
+TABLE    = $1FE7         ; monitor: hex digit -> 7-segment pattern
 GETBYT   = $1F9D         ; 2 hex chars from TTY -> A
 
 KEY_DA   = $11
