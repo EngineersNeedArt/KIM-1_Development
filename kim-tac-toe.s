@@ -12,8 +12,8 @@
 ;       4 5 6
 ;       1 2 3
 ;   Your marks are steady, KIM's flicker.  A winning line blinks; a draw
-;   blinks every square.  After a game GO/"+" starts another.  PC shows
-;   "ODDS" and KIM's I.Q. (initially $0C = 75%): key in a new value
+;   blinks every square.  After a game "GO"/"+" starts another.  PC shows
+;   "ODDS" and KIM's "I.Q." (initially $0C = 75%): key in a new value
 ;   ($00-$10), then DA to carry on.  I.Q. goes up when you win and down
 ;   when KIM wins.
 ;
