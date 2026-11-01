@@ -89,8 +89,10 @@ GETCH    = $1E5A         ; TTY character -> A (alters X, Y)
 OUTSP    = $1E9E         ; print space
 OUTCH    = $1EA0         ; print character in A to TTY
 SCANDS   = $1F1F         ; show POINTH POINTL INH on display
-CONVD    = $1F48         ; output HEX digit
-OUTPUT   = $1F4E         ; output 7 segment code stored in A register (light up a custom segment)
+OUTPUT   = $1F4E         ; mid-routine entry into CONVD ($1F48), not a
+                         ; documented API: A = 7-seg pattern, X = digit
+                         ; select ($09..$13), X += 2 on return, Y restored
+                         ; from TEMP ($FC) -- caller must STY TEMP first
 KEYIN    = $1F40         ; key pressed? (A <> 0)
 GETKEY   = $1F6A         ; key code -> A
 GETBYT   = $1F9D         ; 2 hex chars from TTY -> A
