@@ -25,12 +25,6 @@
 
         .include "kim.inc"
 
-; ---- Monitor entry not defined in kim.inc ---------------------------
-; Entry in the middle of CONVD ($1F48): A = segment pattern, X = digit
-; select ($09,$0B,...); the routine steps X on by 2 and restores Y from
-; TEMP ($FC), which is why display saves Y there first.
-OUTSEG          = $1F4E         ; CONVD + 6
-
 ; ---- Zero page: program variables -----------------------------------
 ; (The monitor owns $EF-$FF, but TEMP at $FC is shared with display.)
 play_no         = $b5           ; number of the current play, 1-9
@@ -380,7 +374,7 @@ display:
         beq     @out
 @on:    lda     seg_table,y
 @out:   sty     TEMP                            ; the monitor restores Y
-        jsr     OUTSEG                          ; show segment, X += 2
+        jsr     OUTPUT                          ; show segment, X += 2
         iny
         cpy     #9
         beq     @last                           ; all squares done
