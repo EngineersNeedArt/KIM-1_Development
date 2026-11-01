@@ -93,6 +93,10 @@ KEYIN   = $1F40         ; key pressed? (A <> 0)
 GETKEY  = $1F6A         ; key code -> A
 GETBYT  = $1F9D         ; 2 hex chars from TTY -> A
 
+KEY_DA   = $11
+KEY_PLUS = $12
+KEY_GO   = $13
+KEY_PC   = $14
 KEY_NONE = $15          ; GETKEY value when no key is down
 
 ; ---- Program start used by the build ($0200-$03FF is the usual area) ----
