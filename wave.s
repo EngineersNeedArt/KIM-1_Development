@@ -9,11 +9,7 @@
 
 ; Segment bits in SAD (PA0-PA6); a segment is lit when its bit is 1
 SEG_A   = $01
-SEG_B   = $02
-SEG_C   = $04
 SEG_D   = $08
-SEG_E   = $10
-SEG_F   = $20
 SEG_G   = $40
 
 PATTERN_LEN    = 7      ; table entries (the display has six digits)
