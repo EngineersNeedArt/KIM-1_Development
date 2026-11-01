@@ -6,7 +6,7 @@
 ; only names, comments and syntax have been modernised.
 ;
 ; How to play
-;   Run from $0100.  GO = KIM moves first, "+" = you move first.
+;   Run from $0100.  "GO" = KIM moves first, "+" = you move first.
 ;   Display digits 2-4 show the board as a 3x3 grid, squares numbered
 ;       7 8 9
 ;       4 5 6
