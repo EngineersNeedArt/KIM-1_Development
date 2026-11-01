@@ -48,7 +48,7 @@ I spent an evening with Claude getting a 6502 development environment and workfl
 
    Second, under the `Transmit` setting, you want to check (turn on) `Use transmit character delay` and `Use transmit line delay`. This slows down the transfer of text to the PAL-2 so it can keep up.
 
-   Finally, click `OK` in the options panel and connect to the PAL-2 (`Connection→Connect`, ⌘K). If you hit `ENTER` (`Return` key) PAL-2 should come back with `KIM` in `**CoolTerm**.
+   Finally, click `OK` in the options panel and connect to the PAL-2 (`Connection→Connect`, ⌘K). If you hit `ENTER` (`Return` key) PAL-2 should come back with `KIM` in **CoolTerm**.
 
 10) Copy and paste the paper tape text.
 
