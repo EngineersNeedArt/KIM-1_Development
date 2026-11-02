@@ -48,20 +48,20 @@ I spent an evening with Claude getting a 6502 development environment and workfl
 
    Second, under the `Transmit` setting, you want to check (turn on) `Use transmit character delay` and `Use transmit line delay`. This slows down the transfer of text to the PAL-2 so it can keep up.
 
-   Finally, click `OK` in the options panel and connect to the PAL-2 (`Connection→Connect`, ⌘K). If you hit `ENTER` (`Return` key) PAL-2 should come back with `KIM` in `**CoolTerm**.
+   Finally, click `OK` in the options panel and connect to the PAL-2 (`Connection→Connect`, ⌘K). If you hit `ENTER` (`Return` key) PAL-2 should come back with `KIM` in **CoolTerm**.
 
-11) Copy and paste the paper tape text.
+10) Copy and paste the paper tape text.
 
     Back in **VS Code**, select the text from `wave.tape` and `Edit→Copy` to the clipboard.
 
     Back in **CoolTerm**, connected to PAL-2, enter `L` to indicate you want to **L**oad a paper tape, and then `Edit→Paste` the paper tape text. You should see it slowly being *typed* by **CoolTerm** as it is sent to PAL-2. It should take less than a minute.
 
-12) Finally, run the program. In **CoolTerm** type `0200` and then `SPACEBAR` to go to address 0200. Then type `G` to tell PAL-2 to "GO".
+11) Finally, run the program. In **CoolTerm** type `0200` and then `SPACEBAR` to go to address 0200. Then type `G` to tell PAL-2 to "GO".
 
     If everything works, PAL-2 should start displaying *the wave* across its LED display. (Make sure the `SST` switch is slid to the right!).
 
 **Note: not *every* program starts at address 0200. Check a program's header for info specific to it.**
 
-From this point on your workflow is to launch **VS Code** and open the folder where your code is (step 4, above), launch **CoolTerm** and connect to your PAL-2 (step 9), and then go back and forth editing assembly, compiling/linking (step 7), copying/pasting the paper tape code to **CoolTerm** (step 11) and running on Pal-2 (step 12).
+From this point on your workflow is to launch **VS Code** and open the folder where your code is (step 4, above), launch **CoolTerm** and connect to your PAL-2 (step 9), and then go back and forth editing assembly, compiling/linking (step 7), copying/pasting the paper tape code to **CoolTerm** (step 10) and running on Pal-2 (step 11).
 
 Enjoy!
