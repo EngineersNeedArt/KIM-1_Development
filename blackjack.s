@@ -1,4 +1,4 @@
-; blackjack.s -- BLACKJACK for the KIM-1 / PAL-II
+; blackjack.s -- BLACKJACK for the KIM-1
 ; From "The First Book of KIM", converted to modern ca65 source.
 ;
 ; KIM plays blackjack against you with a real 52-card deck, so counting
