@@ -1,6 +1,6 @@
 ; ---------------------------------------------------------------------------
 ; ONE ARMED BANDIT
-; by Jim Butterfield, from The First Book of KIM
+; by Jim Butterfield, from "The First Book of KIM"
 ;
 ; Start at $0200. KIM gives you $25; every key press spins the wheels
 ; and costs $1. Three bars pays $15, three ups $10, three downs $5,
