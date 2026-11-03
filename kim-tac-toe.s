@@ -1,7 +1,7 @@
 ; ----------------------------------------------------------------------
-; kim-tac-toe.s -- Tic-tac-toe for the KIM-1 / PAL-II
+; kim-tac-toe.s -- Tic-tac-toe for the KIM-1
 ;
-; ca65 version of the "Kim-Tac-Toe" listing from The First Book of KIM.
+; ca65 version of the "Kim-Tac-Toe" listing from "The First Book of KIM".
 ; Logic, register use and memory layout are identical to the original;
 ; only names, comments and syntax have been modernised.
 ;
