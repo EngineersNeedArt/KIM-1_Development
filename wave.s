@@ -1,4 +1,4 @@
-; wave.asm -- travelling segment wave on the PAL-II six-digit display
+; wave.asm -- travelling segment wave on the KIM-1 six-digit display
 ;
 ; The display is multiplexed: one digit is selected through SBD, its
 ; segments are written to SAD, held ~1 ms, then the next digit.  Every
