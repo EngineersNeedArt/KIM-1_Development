@@ -1,4 +1,4 @@
-; addition.s -- six-digit adding machine for the KIM-1 / PAL-2
+; addition.s -- six-digit adding machine for the KIM-1
 ; From "The First Book of KIM"
 ;
 ; GO clears the total.  Key in a number, press + to add it to the total.
