@@ -1,5 +1,4 @@
-; kim.inc -- PAL-II / KIM-1 symbols for ca65
-; Source: PAL-II quick-reference cheat sheet (memory map, zero page, monitor routines)
+; kim.inc -- KIM-1 symbols for ca65
 ; Usage:  .include "kim.inc"
 ;
 ; Notes
