@@ -1,4 +1,4 @@
-; bitz.s -- binary-to-hexadecimal drill for the KIM-1 / PAL-II
+; bitz.s -- binary-to-hexadecimal drill for the KIM-1
 ; From "The First Book of KIM", converted to ca65 source.
 ;
 ; Eight bits are shown on the left four digits, two bits per digit
