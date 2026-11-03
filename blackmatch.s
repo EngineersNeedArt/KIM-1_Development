@@ -1,13 +1,13 @@
-; blackmatch.s -- BLACK MATCH for the KIM-1 / PAL-II
+; blackmatch.s -- BLACK MATCH for the KIM-1
 ; Original by Ron Kushnier (modified by the editors),
-; from The First Book of KIM, pp. 46-47.
+; from "The First Book of KIM", pp. 46-47.
 ;
 ; 21 matches; each player takes 1, 2 or 3 per turn; whoever is left
 ; holding the last match loses.  You go first.  Start at $0200, press GO.
 ;
 ; Display (six digits):
 ;   left two   -- your move (key 1, 2 or 3)
-;   centre two -- the computer's move, shown after some "think time"
+;   center two -- the computer's move, shown after some "think time"
 ;   right two  -- matches remaining
 ;
 ; The computer has an IQ.  It plays the winning move whenever a random
