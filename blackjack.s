@@ -19,7 +19,6 @@
 ; totals are a push.  The balance is BCD and is capped at $99.
 ; KIM re-shuffles when fewer than 9 cards remain.
 
-        .setcpu "6502"
         .include "kim.inc"
 
 ; ---- Zero page ---------------------------------------------------------
