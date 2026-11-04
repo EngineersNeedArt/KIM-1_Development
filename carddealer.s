@@ -8,7 +8,6 @@
 ; The "random" number is whatever the two free-running RIOT timers happen
 ; to read when the key goes down.
 
-        .setcpu "6502"
         .include "kim.inc"
 
 DECK_SIZE = 52
