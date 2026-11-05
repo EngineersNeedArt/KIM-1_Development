@@ -1,4 +1,4 @@
-; morse.s -- Morse code group sender for the KIM-1 / PAL-2
+; codetest.s -- Morse code group sender for the KIM-1
 ;
 ; From "The First Book of KIM".  Needs a speaker on PA0 (figure 5.1 of
 ; the KIM-1 User Manual).  Start at $0200.
@@ -24,19 +24,7 @@
 ;   nchars           size of the character set; 26 = letters only
 ;   init table       speed ($33 = about 16 groups/min, $66 = about
 ;                    8 groups/min) and tone
-;
-; Corrections made to the printed listing (OCR errors, found by checking
-; each opcode against its mnemonic, each branch target, and the tables):
-;   $0200  LDX #$0C   -> #$0B   (12 init values, not 13)
-;   $0291  LDX $0057  -> $00E7  (tone byte; $57 is a misread $E7)
-;   $02B3  opcode $80 -> $8D    (STA absolute)
-;   $02C3  CMP #$06   -> CPY #$06
-;   $0256  JSR $1E8E  -> $1E8C  (INIT1)
-;   $0312  last code-table byte $BC -> $8C (equal sign is -...-)
-;   RAND   seed moved from $E0-$E5 to $D0-$D5, CLC -> SEC (second scan);
-;          the $E0 block overlapped the counters, index and pointer
-;   $02E4  tone byte $64: differs from the first scan ($66); unverified
-;   Comment typos (labels, addresses, "Ni") fixed.
+
 
         .include "kim.inc"
 
