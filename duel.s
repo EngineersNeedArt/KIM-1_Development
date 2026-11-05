@@ -1,4 +1,4 @@
-; reaction.s -- two-player reaction game for the KIM-1
+; duel.s -- two-player reaction game for the KIM-1
 ; From "The First Book of KIM"; converted to ca65.
 ;
 ; Each player starts with 10 points, shown at opposite ends of the display.
