@@ -29,7 +29,7 @@ TMPX     = $00FD         ; scratch X
 CHAR     = $00FE         ; TTY character
 MODE     = $00FF         ; monitor mode (AD/DA)
 
-; ---- RIOT U3 (6532-003): user ports on the APP connector ----
+; ---- RIOT #1: user ports on the APP connector ----
 PAD      = $1700         ; port A data  (PA0-PA7)
 PADD     = $1701         ; port A direction (1 = output)
 PBD      = $1702         ; port B data  (PB0-PB5, PB7)
@@ -48,7 +48,7 @@ T1024_IRQ   = $170F
 TIMER_READ  = $1706
 TIMER_FLAG  = $1707
 
-; ---- RIOT U2 (6532-002): system -- display / keypad / TTY (do not use) ----
+; ---- RIOT #2: system -- display / keypad / TTY (do not use) ----
 SAD      = $1740         ; display segments / keypad columns; PA7 = TTL IN
 SADD     = $1741         ; port A direction
 SBD      = $1742         ; digit / row select; PB0 = TTL OUT
