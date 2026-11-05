@@ -1,4 +1,4 @@
-; carddealer.s -- deal a 52-card deck, one card per keypress (KIM-1)
+; carddealer.s -- deal a 52-card deck, one card per keypress.
 ;
 ; From "The First Book of KIM". The value and suit of each card show in
 ; the right-hand two display digits (A 2-9 T J Q K / S H D C). Press any
