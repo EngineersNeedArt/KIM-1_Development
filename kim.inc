@@ -84,10 +84,12 @@ START    = $1C4F         ; return to monitor (JMP)
 PRTPNT   = $1E1E         ; print POINTH/POINTL to TTY
 CRLF     = $1E2F         ; print CR LF
 PRTBYT   = $1E3B         ; print A as 2 hex digits
-GETCH    = $1E5A         ; TTY character -> A (alters X, Y)
+GETCH    = $1E5A         ; TTY character -> A (alters X, Y) 
+INIT1    = $1E8C         ; monitor I/O port setup (the User Manual's own label).
 OUTSP    = $1E9E         ; print space
 OUTCH    = $1EA0         ; print character in A to TTY
 SCANDS   = $1F1F         ; show POINTH POINTL INH on display
+KEYTS    = $1F3D         ; not a documented monitor entry—from "The First Book of KIM"
 OUTPUT   = $1F4E         ; mid-routine entry into CONVD ($1F48), not a
                          ; documented API: A = 7-seg pattern, X = digit
                          ; select ($09..$13), X += 2 on return, Y restored
