@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; ONE ARMED BANDIT
+; BANDIT
 ; by Jim Butterfield, from "The First Book of KIM"
 ;
 ; Start at $0200. KIM gives you $25; every key press spins the wheels
