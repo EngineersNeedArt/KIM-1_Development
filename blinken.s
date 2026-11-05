@@ -1,4 +1,4 @@
-; blinken.s -- random-segment "blinkenlights" on the PAL-II six-digit display
+; blinken.s -- random-segment "blinkenlights" on the KIM-1 six-digit display
 ;
 ; Derived from wave.s.  Same multiplexing: one digit is selected through
 ; SBD, its segments are written to SAD, held ~1 ms, then the next digit.
