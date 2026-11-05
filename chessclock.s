@@ -1,4 +1,4 @@
-; chessclock.s -- Chess Clock for the KIM-1 / PAL-II
+; chessclock.s -- Chess Clock for the KIM-1
 ; From The First Book of KIM; converted to ca65 source.
 ;
 ; Two independent clocks are operated by the two players, who press
