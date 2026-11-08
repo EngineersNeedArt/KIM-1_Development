@@ -1,4 +1,4 @@
-# KIM-1_Development
+# KIM-1 Development on MacOS
 Getting started with a MacOS **KIM-1** 6502 development environment.
 
 I spent an evening with Claude getting a 6502 development environment and workflow set up on MacOS so that I could write/compile 6502 assembly and test it on the PAL-2 (KIM-1 clone). This repository captures that work, makes it easy for someone to also get started easily.
