@@ -1,4 +1,4 @@
-; wumpus.s -- WUMPUS for the KIM-1 / PAL-2
+; wumpus.s -- WUMPUS for the KIM-1
 ; From "The First Book of KIM".  Adapted from the game by Gregory Yob in
 ; "The Best of Creative Computing".
 ;
