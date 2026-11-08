@@ -86,7 +86,7 @@ ODDS_DISPLAY    = $0dd5         ; shows as "ODDS" on the display
 ; ======================================================================
 ; Page 1: subroutines and tables
 ; ======================================================================
-        .segment "LOWCODE"                      ; $0100
+        .segment "PAGE1"                      ; $0100
 
 entry:                                          ; start the program here
         jmp     start_iq

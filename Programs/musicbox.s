@@ -3,7 +3,7 @@
 ; Plays tunes through the cassette audio-out (PB7 of the keyboard/display
 ; RIOT) or, with SPEAKER defined, through a speaker on PA0 of the
 ; application connector.  The player is at $0200; the tunes live in zero
-; page ($0000-$00DF) and are emitted into the same tape (segment ZPLOAD).
+; page ($0000-$00DF) and are emitted into the same tape (segment ZPDATA).
 ; Start at $0200 (AD 0 2 0 0 GO).  BRK needs IRQV ($17FE/$17FF) = $1C00.
 ;
 ; ---- Build options ----
@@ -53,8 +53,8 @@ val1    = $EA
 timer   = $EB
 xsav    = $EC
 
-; ---- Tune data: loaded at $0000 (segment ZPLOAD) ----
-        .segment "ZPLOAD"
+; ---- Tune data: loaded at $0000 (segment ZPDATA) ----
+        .segment "ZPDATA"
 
 .ifndef ENTERTAINER
 
