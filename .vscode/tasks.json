@@ -7,7 +7,7 @@
       "options": {
         "env": { "B": "build/${fileBasenameNoExtension}" }
       },
-      "command": "mkdir -p build && ca65 --cpu 6502 -I .. -l \"$B.lst\" -o \"$B.o\" \"${relativeFile}\" && ld65 -C kim.cfg -o \"$B.bin\" \"$B.o\" && srec_cat \"$B.bin\" -binary -offset 0x0200 \"$B.bin-low.bin\" -binary -offset 0x0100 \"$B.bin-zp.bin\" -binary -offset 0x0000 -o \"$B.tape\" -MOS_Technologies && rm -f \"$B.lst\" \"$B.o\" \"$B.bin\" \"$B.bin-low.bin\" \"$B.bin-zp.bin\"",
+      "command": "mkdir -p build && ca65 --cpu 6502 -I Programs -l \"$B.lst\" -o \"$B.o\" \"${relativeFile}\" && ld65 -C kim.cfg -o \"$B.bin\" \"$B.o\" && srec_cat \"$B.bin\" -binary -offset 0x0200 \"$B.bin-low.bin\" -binary -offset 0x0100 \"$B.bin-zp.bin\" -binary -offset 0x0000 -o \"$B.tape\" -MOS_Technologies && rm -f \"$B.lst\" \"$B.o\" \"$B.bin\" \"$B.bin-low.bin\" \"$B.bin-zp.bin\"",
       "group": { "kind": "build", "isDefault": true },
       "presentation": { "clear": true },
       "problemMatcher": {
