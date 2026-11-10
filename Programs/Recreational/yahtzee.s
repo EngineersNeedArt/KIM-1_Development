@@ -1,16 +1,20 @@
-; yahtzee.s -- KIM-1 Yahtzee: dice, keys, animation and scoring
+; yahtzee.s -- KIM-1 Yahtzee: dice, keys, animation, scoring and final score
 ; plain 6502, ca65, lowercase, using kim.inc and kim.cfg
 ;
 ; Play:
-;   GO        first hand only: all five dice tumble, then are revealed
+;   GO        starts a game: all five dice tumble, then are revealed
 ;             left to right on random values
 ;   digit 6   round: - first roll, = first re-roll, three bars second re-roll
 ;   keys 1-5  toggle a die between steady and flashing
 ;   DA        the flashing dice tumble and are revealed again.  After the
 ;             third roll of a hand, or with no die flashing, the hand is
 ;             final: it is scored into the best open trick, the dice stay
-;             up for a moment, then the points show in the right two digits.
-;             DA then deals a new hand (all five dice).
+;             up for a moment, then the trick's name shows on the left four
+;             digits and its points on the right two.  DA deals the next
+;             hand (all five dice).
+;   After the 13th trick, DA shows the final score (with the 35-point upper
+;   bonus): "tot" and the total.  Only GO does anything then; it starts a
+;   new game.
 ;
 ; Choosing the trick: every open trick is tried and the one with the best
 ; margin -- points minus what that trick is typically worth (see bias) --
@@ -24,9 +28,9 @@
 ;   9 small straight  10 large straight   11 yahtzee           12 chance
 ;
 ; Memory (kim.cfg): the engine lives in MAIN ($0200), the scoring routines
-; and a few small helpers in PAGE1 ($0100, well below the top of the stack),
-; the lookup tables in zero page (ZPDATA).  Load all three binaries and
-; start at $0200.
+; and a few small helpers in PAGE1 ($0100, below the stack), and the lookup
+; tables and the final-score display in zero page (ZPDATA).  Load all three
+; binaries and start at $0200.
 ;
 ; The random number subroutine is Jim Butterfield's, from KIM User Notes #1,
 ; page 4.  It is also called on every refresh pass, so the sequence depends
@@ -74,12 +78,18 @@ sg_H    = $76
         .zeropage
 dbuf:      .res 6       ; segment pattern per digit, leftmost first
 dice:      .res 5       ; die values 1-6
-tcnt:      .res 5       ; tumble countdown per die
-tstop:     .res 5       ; ticks until each tumbling die is revealed
-counts:    .res 7       ; counts[1..6] = how many dice show each face
 score:     .res 13      ; scorecard, see "Scorecard" above
+turn:      .res 1       ; tricks scored this game (must follow score: clear_card
+                        ; clears both)
 rnd:       .res 6       ; Butterfield's generator state
-jvec:      .res 2       ; indirect jump vector
+tcnt:      .res 5       ; tumble: countdown per die
+tstop:     .res 5       ; tumble: ticks until each die is revealed
+; evaluation scratch lives on top of the tumble variables: tumbling and
+; evaluating never overlap
+counts     = tcnt       ; 7 bytes: counts[1..6] = how many dice show each face
+dsum       = tstop+2    ; sum of the five dice
+present    = tstop+3    ; bit n set = face n+1 appears (for the straights)
+sqsum      = tstop+4    ; sum of the squares of counts[1..6]
 frame:     .res 1       ; incremented once per refresh pass
 flashmask: .res 1       ; bit n set = digit n flashes (bit 0 = leftmost)
 blankbits: .res 1
@@ -88,9 +98,6 @@ tmask:     .res 1       ; dice still tumbling
 lastkey:   .res 1
 lockout:   .res 1
 rollnum:   .res 1       ; rolls done in this hand (1..3)
-dsum:      .res 1       ; sum of the five dice
-present:   .res 1       ; bit n set = face n+1 appears (for the straights)
-sqsum:     .res 1       ; sum of the squares of counts[1..6]
 best:      .res 1       ; best margin so far this evaluation (biased, see bias)
 bestslot:  .res 1       ; its trick number
 bestpts:   .res 1       ; its points
@@ -99,7 +106,7 @@ pts:       .res 1       ; points the trick being tried is worth
 tmp:       .res 1
 pcount:    .res 1
 
-; ---- lookup tables (zero page: shorter and faster to index) -------------
+; ---- lookup tables and the final-score display (zero page) ---------------
         .segment "ZPDATA" : zeropage
 seg_round:                                  ; index = rollnum
         .byte $00,$40,$09,$49               ; -  =  and three bars
@@ -115,12 +122,13 @@ tstoptab: .byte 32,40,48,56,64              ; ticks before each die is revealed
 ; large 33, yahtzee 17, chance 22)
 bias:   .byte 61,58,55,52,49,46
         .byte 42,51,41,35,31,47,42
-trick_lo: .byte <test_3kind,<test_4kind,<test_full,<test_small
-          .byte <test_large,<test_yahtzee,<test_chance      ; tricks 6..12
-trick_hi: .byte >test_3kind,>test_4kind,>test_full,>test_small
-          .byte >test_large,>test_yahtzee,>test_chance
+; the trick routines' addresses minus 1, for call_trick (tricks 6..12)
+trick_lo: .byte <(test_3kind-1),<(test_4kind-1),<(test_full-1),<(test_small-1)
+          .byte <(test_large-1),<(test_yahtzee-1),<(test_chance-1)
+trick_hi: .byte >(test_3kind-1),>(test_4kind-1),>(test_full-1),>(test_small-1)
+          .byte >(test_large-1),>(test_yahtzee-1),>(test_chance-1)
 ; what the left four digits say about the trick just scored, 4 bytes each,
-; in trick-number order
+; in trick-number order; the last is for the final score
 names:  .byte sg_1,sg_dash,sg_S,sg_sp           ; 1-S
         .byte sg_2,sg_dash,sg_S,sg_sp           ; 2-S
         .byte sg_3,sg_dash,sg_S,sg_sp           ; 3-S
@@ -134,6 +142,37 @@ names:  .byte sg_1,sg_dash,sg_S,sg_sp           ; 1-S
         .byte sg_L,sg_S,sg_t,sg_r               ; LStr
         .byte sg_Y,sg_A,sg_H,sg_t               ; YAHt
         .byte sg_C,sg_h,sg_n,sg_c               ; Chnc
+        .byte sg_t,sg_o,sg_t,sg_sp              ; tot
+
+; ---- show_total: the final score ------------------------------------------
+; "tot" on the left, the total (0..375) on the right.  code in zero page
+; because that's where there was room.
+show_total:
+        jsr sum_card            ; y:a = total
+        ldx #0                  ; x = hundreds
+        cpy #0
+        beq @h
+        ldx #2                  ; 256 = two hundreds and 56
+        clc
+        adc #56
+@h:     cmp #100
+        bcc @d
+        sbc #100
+        inx
+        bne @h
+@d:     stx tmp
+        ldx #13                 ; the "tot " entry of names
+        stx bestslot
+        jsr show_score          ; name, and a (0..99) as tens and ones
+        ldy tmp
+        beq @done               ; under 100: nothing more
+        lda TABLE,y
+        sta dbuf+3              ; hundreds
+        lda dbuf+4
+        bne @done
+        lda TABLE               ; tens was blanked as a leading zero: it is a 0
+        sta dbuf+4
+@done:  rts
 
 ; ===== PAGE1: scoring and a few small helpers ===========================
         .segment "PAGE1"
@@ -153,9 +192,9 @@ set_round:
         sta dbuf+5
         rts
 
-; ---- clear_card: every trick open ------------------------------------------
+; ---- clear_card: every trick open, turn = 0 ------------------------------
 clear_card:
-        ldx #12
+        ldx #13
         lda #0
 @c:     sta score,x
         dex
@@ -241,9 +280,19 @@ test_yahtzee:
         lda #50
 @r:     rts
 
-; has_run: a = run pattern (faces 1.. as bits 0..), x = positions to slide it
-; through -> carry set if present contains the pattern at some position
-has_run:
+test_small:                     ; four in a row: 1234, 2345 or 3456
+        ldy #30
+        lda #$0f
+        ldx #3
+        bne straight            ; always
+
+test_large:                     ; five in a row: 12345 or 23456
+        ldy #40
+        lda #$1f
+        ldx #2
+; straight: a = run pattern (faces 1.. as bits 0..), x = positions to slide
+; it through, y = points -> a = points if present contains the pattern
+straight:
         sta tmp
 @t:     lda present
         and tmp
@@ -252,28 +301,10 @@ has_run:
         asl tmp
         dex
         bne @t
-        clc
-        rts
-@yes:   sec
-        rts
-
-test_small:                     ; four in a row: 1234, 2345 or 3456
-        lda #$0f
-        ldx #3
-        jsr has_run
         lda #0
-        bcc @r
-        lda #30
-@r:     rts
-
-test_large:                     ; five in a row: 12345 or 23456
-        lda #$1f
-        ldx #2
-        jsr has_run
-        lda #0
-        bcc @r
-        lda #40
-@r:     rts
+        rts
+@yes:   tya
+        rts
 
 test_chance:
         lda dsum
@@ -287,16 +318,118 @@ call_trick:
         tay
         iny                     ; y = face
         jmp test_upper
-@table: lda trick_lo-6,x
-        sta jvec
-        lda trick_hi-6,x
-        sta jvec+1
-        jmp (jvec)              ; the routine's rts returns to our caller
+@table: lda trick_hi-6,x        ; push the routine's address - 1 and "return"
+        pha                     ; into it; its rts goes back to our caller
+        lda trick_lo-6,x
+        pha
+        rts
 
-; ===== MAIN: engine and game loop =======================================
+; ---- sum_card: all 13 tricks used -> y:a = total with the upper bonus -----
+sum_card:
+        lda #0                  ; upper tricks: the six $80 flags add up to 0
+        ldx #5                  ; (mod 256), so this is just their points
+@u:     clc
+        adc score,x
+        dex
+        bpl @u
+        cmp #63
+        bcc @nb
+        adc #34                 ; carry is set: 35 points of bonus
+@nb:    ldy #0                  ; y = high byte
+        ldx #12                 ; lower tricks
+@l:     sta tmp
+        lda score,x
+        and #$7f
+        clc
+        adc tmp
+        bcc @c
+        iny
+@c:     dex
+        cpx #5
+        bne @l
+        rts
+
+; ===== MAIN: game loop and engine =======================================
         .code
 
-        jmp main
+; ---- game loop ------------------------------------------------------------
+main:
+        lda #0
+        sta frame
+        sta flashmask
+        sta lockout
+        sta dbuf+5
+        lda #KEY_NONE
+        sta lastkey
+        ldx #4
+        lda #$40
+@dash:  sta dbuf,x              ; "-----": waiting for GO
+        dex
+        bpl @dash
+
+@go:    jsr refresh             ; the wait for GO also stirs the generator
+        jsr poll_key
+        cmp #KEY_GO
+        bne @go
+        jsr clear_card          ; new game
+
+@hand:  lda #1
+        sta rollnum
+        jsr set_round
+        lda #$1f
+        jsr roll                ; deal: all five dice
+
+@loop:  jsr refresh
+        jsr poll_key
+        cmp #KEY_NONE
+        beq @loop
+        cmp #KEY_DA
+        beq @da
+        cmp #1
+        bcc @loop               ; key 0: ignore
+        cmp #6
+        bcs @loop               ; keys 6..$10 etc: ignore
+        tax
+        dex                     ; x = 0..4
+        lda flashmask
+        eor bitval,x
+        sta flashmask
+        jmp @loop
+
+@da:    lda flashmask
+        beq @score              ; nothing selected: this hand is final
+        pha
+        lda #0
+        sta flashmask
+        inc rollnum
+        jsr set_round
+        pla
+        jsr roll
+        lda rollnum
+        cmp #3
+        bcc @loop               ; rolls remain: back to hold selection
+
+@score: jsr evaluate            ; a = points for the best open trick
+        inc turn
+        pha
+        lda #pause_rounds
+        sta pcount
+@pause: lda #0
+        jsr wait                ; 256 refresh passes: let the hand sink in
+        dec pcount
+        bne @pause
+        pla
+        jsr show_score
+@next:  jsr refresh
+        jsr poll_key
+        cmp #KEY_DA
+        bne @next
+        lda turn
+        cmp #13
+        beq @over
+        jmp @hand
+@over:  jsr show_total          ; the 13th trick is in: final score;
+        jmp @go                 ; then only GO does anything
 
 ; ---- refresh: one multiplex pass over all six digits -------------------
 ; clobbers a,x,y,blankbits.  increments frame.
@@ -386,16 +519,6 @@ poll_key:
         stx lockout
 @done:  rts
 
-; ---- show_dice: dice[0..4] -> dbuf[0..4]; dbuf[5] untouched -------------
-show_dice:
-        ldx #4
-@l:     ldy dice,x
-        lda seg_digit,y
-        sta dbuf,x
-        dex
-        bpl @l
-        rts
-
 ; ---- tumble: a = mask of dice to animate (bit 0 = die 1) ----------------
 ; squares bounce between top and bottom, each die at its own rate.  each die
 ; also has a stop time (tstoptab, left to right increasing); when it runs
@@ -463,15 +586,13 @@ roll:   sta tmask
 ; ---- evaluate: score the current dice into the best open trick -------------
 ; margin = points + bias[trick], bias = 64 - typical points, so the compare
 ; stays unsigned.  highest margin wins (ties: lowest trick number).
-; a = points scored.  if the card is already full, starts a new game first.
+; a = points scored.  at least one trick must be open.
 evaluate:
         jsr tally
         lda #0
         sta best                ; every margin is >= 31, so the first open
-        lda #$ff                ; trick always becomes the leader
-        sta bestslot
-        ldx #12                 ; downward, so '>=' leaves ties to the lowest
-@slot:  lda score,x
+        ldx #12                 ; trick always becomes the leader; going
+@slot:  lda score,x             ; downward with '>=' leaves ties to the lowest
         bne @skip               ; used
         stx slot
         jsr call_trick
@@ -489,10 +610,7 @@ evaluate:
 @skip:  dex
         bpl @slot
         ldy bestslot
-        bpl @store
-        jsr clear_card          ; no open trick: new game, score again
-        jmp evaluate
-@store: lda bestpts
+        lda bestpts
         ora #$80
         sta score,y
         lda bestpts
@@ -527,76 +645,3 @@ show_score:
         cpy #4
         bne @n
         rts
-
-; ---- game loop ------------------------------------------------------------
-main:
-        lda #0
-        sta frame
-        sta flashmask
-        sta lockout
-        sta dbuf+5
-        jsr clear_card          ; new game
-        lda #KEY_NONE
-        sta lastkey
-        ldx #4
-        lda #$40
-@dash:  sta dbuf,x              ; "-----": waiting for GO
-        dex
-        bpl @dash
-
-@wait:  jsr refresh             ; the wait for GO also stirs the generator
-        jsr poll_key
-        cmp #KEY_GO
-        bne @wait
-
-@hand:  lda #1
-        sta rollnum
-        jsr set_round
-        lda #$1f
-        jsr roll                ; deal: all five dice
-
-@loop:  jsr refresh
-        jsr poll_key
-        cmp #KEY_NONE
-        beq @loop
-        cmp #KEY_DA
-        beq @da
-        cmp #1
-        bcc @loop               ; key 0: ignore
-        cmp #6
-        bcs @loop               ; keys 6..$10 etc: ignore
-        tax
-        dex                     ; x = 0..4
-        lda flashmask
-        eor bitval,x
-        sta flashmask
-        jmp @loop
-
-@da:    lda flashmask
-        beq @score              ; nothing selected: this hand is final
-        pha
-        lda #0
-        sta flashmask
-        inc rollnum
-        jsr set_round
-        pla
-        jsr roll
-        lda rollnum
-        cmp #3
-        bcc @loop               ; rolls remain: back to hold selection
-
-@score: jsr evaluate            ; a = points for the best open trick
-        pha
-        lda #pause_rounds
-        sta pcount
-@pause: lda #0
-        jsr wait                ; 256 refresh passes: let the hand sink in
-        dec pcount
-        bne @pause
-        pla
-        jsr show_score
-@next:  jsr refresh
-        jsr poll_key
-        cmp #KEY_DA
-        bne @next
-        jmp @hand
