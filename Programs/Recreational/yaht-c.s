@@ -56,6 +56,7 @@ seg_bot = $5c           ; segments g,c,d,e  (also lowercase "o")
 ; a lowercase letter in a name below is the lowercase glyph.
 sg_sp   = $00
 sg_dash = $40
+sg_apos = $20           ; top left vertical segment: an apostrophe
 sg_1    = $06
 sg_2    = $5b
 sg_3    = $4f
@@ -132,12 +133,12 @@ trick_hi: .byte >(test_3kind-1),>(test_4kind-1),>(test_full-1),>(test_small-1)
           .byte >(test_large-1),>(test_yahtzee-1),>(test_chance-1)
 ; what the left four digits say about the trick just scored, 4 bytes each,
 ; in trick-number order; the last is blank, for the final score
-names:  .byte sg_1,sg_dash,sg_S,sg_sp           ; 1-S
-        .byte sg_2,sg_dash,sg_S,sg_sp           ; 2-S
-        .byte sg_3,sg_dash,sg_S,sg_sp           ; 3-S
-        .byte sg_4,sg_dash,sg_S,sg_sp           ; 4-S
-        .byte sg_5,sg_dash,sg_S,sg_sp           ; 5-S
-        .byte sg_6,sg_dash,sg_S,sg_sp           ; 6-S
+names:  .byte sg_1,sg_apos,sg_S,sg_sp           ; 1'S
+        .byte sg_2,sg_apos,sg_S,sg_sp           ; 2'S
+        .byte sg_3,sg_apos,sg_S,sg_sp           ; 3'S
+        .byte sg_4,sg_apos,sg_S,sg_sp           ; 4'S
+        .byte sg_5,sg_apos,sg_S,sg_sp           ; 5'S
+        .byte sg_6,sg_apos,sg_S,sg_sp           ; 6'S
         .byte sg_3,sg_sp,sg_o,sg_F              ; 3 oF
         .byte sg_4,sg_sp,sg_o,sg_F              ; 4 oF
         .byte sg_F,sg_U,sg_L,sg_L               ; FULL
