@@ -99,6 +99,7 @@ GETKEY      = $1F6A      ; key code -> A
 TABLE       = $1FE7      ; monitor: hex digit -> 7-segment pattern
 GETBYT      = $1F9D      ; 2 hex chars from TTY -> A
 
+KEY_AD      = $10
 KEY_DA      = $11
 KEY_PLUS    = $12
 KEY_GO      = $13

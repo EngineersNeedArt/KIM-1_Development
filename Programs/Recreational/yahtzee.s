@@ -2,19 +2,22 @@
 ; plain 6502, ca65, lowercase, using kim.inc and kim.cfg
 ;
 ; Play:
+;   power on  the display reads YAHt-C
 ;   GO        starts a game: all five dice tumble, then are revealed
 ;             left to right on random values
 ;   digit 6   round: - first roll, = first re-roll, three bars second re-roll
 ;   keys 1-5  toggle a die between steady and flashing
-;   DA        the flashing dice tumble and are revealed again.  After the
-;             third roll of a hand, or with no die flashing, the hand is
-;             final: it is scored into the best open trick, the dice stay
-;             up for a moment, then the trick's name shows on the left four
-;             digits and its points on the right two.  DA deals the next
-;             hand (all five dice).
+;   DA        the flashing dice tumble and are revealed again.  With no
+;             die flashing, DA accepts the hand instead.
+;   AD        accepts the hand as it stands, whatever is flashing.
+;             A hand is also final after its third roll.  A final hand is
+;             scored into the best open trick; the dice stay up for a
+;             moment, then the trick's name shows on the left four digits
+;             and its points on the right two.  DA deals the next hand
+;             (all five dice).
 ;   After the 13th trick, DA shows the final score (with the 35-point upper
-;   bonus): "tot" and the total.  Only GO does anything then; it starts a
-;   new game.
+;   bonus) on the left three digits, and the right two digits bounce dice
+;   squares.  Only GO does anything then; it starts a new game.
 ;
 ; Choosing the trick: every open trick is tried and the one with the best
 ; margin -- points minus what that trick is typically worth (see bias) --
@@ -101,18 +104,18 @@ rollnum:   .res 1       ; rolls done in this hand (1..3)
 best:      .res 1       ; best margin so far this evaluation (biased, see bias)
 bestslot:  .res 1       ; its trick number
 bestpts:   .res 1       ; its points
-slot:      .res 1
-pts:       .res 1       ; points the trick being tried is worth
 tmp:       .res 1
-pcount:    .res 1
+; more scratch that shares a byte with something idle at the time:
+slot       = blankbits  ; evaluate: the trick being tried (refresh isn't running)
+pts        = waitcnt    ; evaluate: points that trick is worth (wait isn't running)
+pcount     = best       ; the pause after a hand (evaluate is finished)
 
 ; ---- lookup tables and the final-score display (zero page) ---------------
         .segment "ZPDATA" : zeropage
 seg_round:                                  ; index = rollnum
         .byte $00,$40,$09,$49               ; -  =  and three bars
-seg_digit:
-        .byte $00,$06,$5b,$4f,$66,$6d,$7d   ; blank,1..6
-bitval: .byte $01,$02,$04,$08,$10,$20
+bitval: .byte $01,$02,$04,$08,$10,$20,$40
+title:  .byte sg_Y,sg_A,sg_H,sg_t,sg_dash,sg_C     ; the opening display
 tperiod:.byte 30,41,35,47,38                ; refresh passes per square flip
 tstart: .byte seg_top,seg_bot,seg_bot,seg_top,seg_bot
 tstoptab: .byte 32,40,48,56,64              ; ticks before each die is revealed
@@ -128,7 +131,7 @@ trick_lo: .byte <(test_3kind-1),<(test_4kind-1),<(test_full-1),<(test_small-1)
 trick_hi: .byte >(test_3kind-1),>(test_4kind-1),>(test_full-1),>(test_small-1)
           .byte >(test_large-1),>(test_yahtzee-1),>(test_chance-1)
 ; what the left four digits say about the trick just scored, 4 bytes each,
-; in trick-number order; the last is for the final score
+; in trick-number order; the last is blank, for the final score
 names:  .byte sg_1,sg_dash,sg_S,sg_sp           ; 1-S
         .byte sg_2,sg_dash,sg_S,sg_sp           ; 2-S
         .byte sg_3,sg_dash,sg_S,sg_sp           ; 3-S
@@ -142,11 +145,12 @@ names:  .byte sg_1,sg_dash,sg_S,sg_sp           ; 1-S
         .byte sg_L,sg_S,sg_t,sg_r               ; LStr
         .byte sg_Y,sg_A,sg_H,sg_t               ; YAHt
         .byte sg_C,sg_h,sg_n,sg_c               ; Chnc
-        .byte sg_t,sg_o,sg_t,sg_sp              ; tot
+        .byte sg_sp,sg_sp,sg_sp,sg_sp           ; (blank: for the final score)
 
 ; ---- show_total: the final score ------------------------------------------
-; "tot" on the left, the total (0..375) on the right.  code in zero page
-; because that's where there was room.
+; the total (0..375) on digits 1-3, with no leading zeros.  digits 5 and 6
+; are left to the main loop, which bounces dice squares on them.
+; code in zero page because that's where there was room.
 show_total:
         jsr sum_card            ; y:a = total
         ldx #0                  ; x = hundreds
@@ -161,18 +165,32 @@ show_total:
         inx
         bne @h
 @d:     stx tmp
-        ldx #13                 ; the "tot " entry of names
+        ldx #13                 ; the blank entry of names
         stx bestslot
-        jsr show_score          ; name, and a (0..99) as tens and ones
+        jsr show_score          ; blank name; tens and ones (a = 0..99) on 5-6
         ldy tmp
-        beq @done               ; under 100: nothing more
+        beq @m                  ; under 100: nothing more
         lda TABLE,y
-        sta dbuf+3              ; hundreds
+        sta dbuf                ; hundreds
         lda dbuf+4
-        bne @done
+        bne @m
         lda TABLE               ; tens was blanked as a leading zero: it is a 0
         sta dbuf+4
-@done:  rts
+@m:     lda dbuf+4              ; move tens and ones to digits 2 and 3
+        sta dbuf+1
+        lda dbuf+5
+        sta dbuf+2
+        rts
+
+; ---- rand_die: a = 1..6 (rejection sampling of 3 bits) -------------------
+; clobbers x.
+rand_die:
+@again: jsr rand
+        and #7
+        beq @again
+        cmp #7
+        beq @again
+        rts
 
 ; ===== PAGE1: scoring and a few small helpers ===========================
         .segment "PAGE1"
@@ -355,20 +373,31 @@ sum_card:
 ; ---- game loop ------------------------------------------------------------
 main:
         lda #0
-        sta frame
-        sta flashmask
+        sta flashmask           ; (frame can start anywhere)
         sta lockout
-        sta dbuf+5
+        sta turn
         lda #KEY_NONE
         sta lastkey
-        ldx #4
-        lda #$40
-@dash:  sta dbuf,x              ; "-----": waiting for GO
+        ldx #5
+@title: lda title,x             ; the opening display (YAHt-C) is just what
+        sta dbuf,x              ; the display buffer starts out holding
         dex
-        bpl @dash
+        bpl @title
 
 @go:    jsr refresh             ; the wait for GO also stirs the generator
-        jsr poll_key
+        lda turn
+        cmp #13
+        bne @k                  ; game over: bounce dice squares on digits 5 and 6,
+        ldx #1                  ; each flipping on its own bit of the frame count
+@c:     lda frame
+        and bitval+5,x
+        beq @z
+        lda #(seg_top ^ seg_bot)
+@z:     eor #seg_bot
+        sta dbuf+4,x
+        dex
+        bpl @c
+@k:     jsr poll_key
         cmp #KEY_GO
         bne @go
         jsr clear_card          ; new game
@@ -385,6 +414,8 @@ main:
         beq @loop
         cmp #KEY_DA
         beq @da
+        cmp #KEY_AD
+        beq @score              ; AD: accept the hand as it stands
         cmp #1
         bcc @loop               ; key 0: ignore
         cmp #6
@@ -409,7 +440,9 @@ main:
         cmp #3
         bcc @loop               ; rolls remain: back to hold selection
 
-@score: jsr evaluate            ; a = points for the best open trick
+@score: lda #0
+        sta flashmask           ; (AD can arrive with dice marked to re-roll)
+        jsr evaluate            ; a = points for the best open trick
         inc turn
         pha
         lda #pause_rounds
@@ -461,8 +494,9 @@ refresh:
         cpy #6
         bne @digit
         stx SBD                 ; x = $15: selects no digit, so the floating
-        lda #0                  ; port a lines can't light digit 6 faintly
-        sta SADD                ; port a back to inputs for the keypad scan
+                                ; port a lines can't light digit 6 faintly
+        sta SADD                ; (a is 0 from the blanking above) port a back
+                                ; to inputs for the keypad scan
         inc frame
         jmp rand                ; stir the generator; its rts returns for us
 
@@ -478,16 +512,6 @@ rand:   sec
         sta rnd+1,x
         dex
         bpl @move
-        rts
-
-; ---- rand_die: a = 1..6 (rejection sampling of 3 bits) -------------------
-; clobbers x.
-rand_die:
-@again: jsr rand
-        and #7
-        beq @again
-        cmp #7
-        beq @again
         rts
 
 ; ---- poll_key: a = new key code, or KEY_NONE ---------------------------
@@ -561,7 +585,7 @@ tumble:
         eor bitval,x            ; (its bit is known to be set)
         sta tmask
         ldy dice,x
-        lda seg_digit,y
+        lda TABLE,y             ; the monitor's digit patterns
         sta dbuf,x
 @next:  dex
         bpl @die
