@@ -1,5 +1,6 @@
 ; yahtzee.s -- KIM-1 Yahtzee: dice, keys, animation, scoring and final score
 ; plain 6502, ca65, lowercase, using kim.inc and kim.cfg
+; by Claude and John
 ;
 ; Play:
 ;   power on  the display reads YAHt-C
