@@ -64,4 +64,6 @@ I spent an evening with Claude getting a 6502 development environment and workfl
 
 From this point on your workflow is to launch **VS Code** and open the folder where your code is (step 4, above), launch **CoolTerm** and connect to your **PAL-2** (step 9), and then go back and forth editing assembly, compiling/linking (step 7), copying/pasting the paper tape code to **CoolTerm** (step 10) and running on **Pal-2** (step 11).
 
-Enjoy!
+## Programs
+
+*TBD*
