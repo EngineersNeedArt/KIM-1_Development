@@ -1,4 +1,4 @@
-; musicbox.s -- Music Box for the KIM-1 (from The First Book of KIM)
+; music_box.s -- Music Box for the KIM-1 (from The First Book of KIM)
 ;
 ; Plays tunes through the cassette audio-out (PB7 of the keyboard/display
 ; RIOT) or, with SPEAKER defined, through a speaker on PA0 of the
