@@ -1,4 +1,4 @@
-; lunarlander.s -- Lunar Lander, from "The First Book of KIM"
+; lunar_lander.s -- Lunar Lander, from "The First Book of KIM"
 ;
 ; Starts at $0200.  You begin at 4500 feet, falling, thrust set low.
 ;
