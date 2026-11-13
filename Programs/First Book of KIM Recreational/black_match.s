@@ -1,4 +1,4 @@
-; blackmatch.s -- BLACK MATCH for the KIM-1
+; black_match.s -- BLACK MATCH for the KIM-1
 ; Original by Ron Kushnier (modified by the editors),
 ; from "The First Book of KIM", pp. 46-47.
 ;
