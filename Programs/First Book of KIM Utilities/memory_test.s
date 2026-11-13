@@ -1,4 +1,4 @@
-; memtest.s -- MEMORY TEST (The First Book of KIM, Utilities)
+; memory_test.s -- MEMORY TEST (The First Book of KIM, Utilities)
 ;
 ; Fast RAM test that also looks for interference between locations.
 ; Adapted from an algorithm by Knaizuk and Hartmann (IEEE Transactions on
