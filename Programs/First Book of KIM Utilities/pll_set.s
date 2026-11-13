@@ -1,4 +1,4 @@
-; pllset.s -- PLL SET tape-input PLL adjustment aid (The First Book of KIM,
+; pll_set.s -- PLL SET tape-input PLL adjustment aid (The First Book of KIM,
 ; Utilities)
 ;
 ; For when tapes won't load (HYPERTAPE especially) and the PLL adjustment
