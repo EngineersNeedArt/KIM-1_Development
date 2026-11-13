@@ -1,4 +1,4 @@
-; verifytape.s -- VERIFY TAPE (The First Book of KIM, Utilities)
+; verify_tape.s -- VERIFY TAPE (The First Book of KIM, Utilities)
 ;
 ; Compares a cassette tape against memory instead of loading it.
 ;
