@@ -1,4 +1,4 @@
-; nim.s -- KIM NIM, from The First Book of KIM
+; kim_nim.s -- KIM NIM, from The First Book of KIM
 ;
 ; A jumbo NIM for the KIM-1.  Six piles, one per display digit.  KIM
 ; matches wits with you: a duffer's game makes KIM sloppy, and as you
