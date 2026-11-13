@@ -1,4 +1,4 @@
-; pingpong.s -- PING PONG for the KIM-1
+; ping_pong.s -- PING PONG for the KIM-1
 ; From "The First Book of KIM".  Starts at $0200.
 ;
 ; Play against the computer, or change the program for a two-player game.
