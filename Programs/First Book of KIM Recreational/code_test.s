@@ -1,4 +1,4 @@
-; codetest.s -- Morse code group sender for the KIM-1
+; code_test.s -- Morse code group sender for the KIM-1
 ;
 ; From "The First Book of KIM".  Needs a speaker on PA0 (figure 5.1 of
 ; the KIM-1 User Manual).  Start at $0200.
