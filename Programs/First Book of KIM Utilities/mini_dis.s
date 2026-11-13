@@ -1,4 +1,4 @@
-; minidis.s -- MINI DIS semi-disassembler (The First Book of KIM, Utilities)
+; mini_dis.s -- MINI DIS semi-disassembler (The First Book of KIM, Utilities)
 ;
 ; Shows the address, opcode and operand bytes of each instruction of the
 ; program under study, and flags illegal opcodes by blinking the display.
