@@ -1,4 +1,4 @@
-; maze.s -- MULTI-MAZE for the KIM-1
+; multi-maze.s -- MULTI-MAZE for the KIM-1
 ; From "The First Book of KIM".  Starts at $0200.
 ;
 ; You are the flashing light in the centre of the display.  Move with
