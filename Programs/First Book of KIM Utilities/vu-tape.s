@@ -1,4 +1,4 @@
-; vutape.s -- VUTAPE (The First Book of KIM, Utilities)
+; vu-tape.s -- VUTAPE (The First Book of KIM, Utilities)
 ;
 ; Lets you watch the contents of a KIM-format tape as it goes by.  First
 ; the display shows the bit stream as the processor tries to synchronize
