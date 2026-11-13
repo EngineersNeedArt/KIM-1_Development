@@ -1,4 +1,4 @@
-; hilo.s -- Hi-Lo, from "The First Book of KIM"
+; hi-lo.s -- Hi-Lo, from "The First Book of KIM"
 ;
 ; KIM picks a secret number from 01 to 98.  The display starts at
 ; 99 (high bound) and 00 (low bound).  Enter a two-digit guess and press
