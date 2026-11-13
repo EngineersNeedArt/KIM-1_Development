@@ -1,4 +1,4 @@
-; keytrain.s -- KEY TRAIN from "The First Book of KIM"
+; key_train.s -- KEY TRAIN from "The First Book of KIM"
 ; KIM-1 keypad touch-typing drill
 ; Shows a random hex digit (0-F) on all six display digits.  Press the
 ; matching key and the display blanks, then a new digit appears.  A wrong
