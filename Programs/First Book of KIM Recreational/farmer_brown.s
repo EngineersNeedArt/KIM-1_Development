@@ -1,4 +1,4 @@
-; farmerbrown.s -- Farmer Brown, from "The First Book of KIM"
+; farmer_brown.s -- Farmer Brown, from "The First Book of KIM"
 ;
 ; You are Farmer Brown, growing a crop of corn.  Animals (Ant, Bird, Cow,
 ; Dog, Elephant, Fox -- drawn in 7-segment form) walk in from the right
