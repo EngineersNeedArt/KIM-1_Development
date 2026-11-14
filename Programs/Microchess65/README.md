@@ -1,4 +1,7 @@
-# How to build Microchess
+# Microchess
+
+## How to build
+
 
 `cd` into this directory (`/Microchess65`)
 
