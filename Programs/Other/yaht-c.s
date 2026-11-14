@@ -1,11 +1,12 @@
-; yahtzee.s -- KIM-1 Yahtzee: dice, keys, animation, scoring and final score
+; yaht-C.s -- KIM-1 Yacht: dice, keys, animation, scoring and final score
 ; plain 6502, ca65, lowercase, using kim.inc and kim.cfg
 ;
 ; Play:
 ;   power on  the display reads YAHt-C
 ;   GO        starts a game: all five dice tumble, then are revealed
 ;             left to right on random values
-;   digit 6   round: - first roll, = first re-roll, three bars second re-roll
+;   digit 6   round, building upward: bottom bar for the first roll, bottom
+;             and middle for the first re-roll, all three bars for the last
 ;   keys 1-5  toggle a die between steady and flashing
 ;   DA        the flashing dice tumble and are revealed again.  With no
 ;             die flashing, DA accepts the hand instead.
@@ -114,7 +115,7 @@ pcount     = best       ; the pause after a hand (evaluate is finished)
 ; ---- lookup tables and the final-score display (zero page) ---------------
         .segment "ZPDATA" : zeropage
 seg_round:                                  ; index = rollnum
-        .byte $00,$40,$09,$49               ; -  =  and three bars
+        .byte $00,$08,$48,$49               ; bottom; bottom+middle; all three bars
 bitval: .byte $01,$02,$04,$08,$10,$20,$40
 title:  .byte sg_Y,sg_A,sg_H,sg_t,sg_dash,sg_C     ; the opening display
 tperiod:.byte 30,41,35,47,38                ; refresh passes per square flip
