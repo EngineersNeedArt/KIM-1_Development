@@ -1,6 +1,5 @@
 ; yahtzee.s -- KIM-1 Yahtzee: dice, keys, animation, scoring and final score
 ; plain 6502, ca65, lowercase, using kim.inc and kim.cfg
-; by Claude and John
 ;
 ; Play:
 ;   power on  the display reads YAHt-C
@@ -140,8 +139,8 @@ names:  .byte sg_1,sg_apos,sg_S,sg_sp           ; 1'S
         .byte sg_4,sg_apos,sg_S,sg_sp           ; 4'S
         .byte sg_5,sg_apos,sg_S,sg_sp           ; 5'S
         .byte sg_6,sg_apos,sg_S,sg_sp           ; 6'S
-        .byte sg_3,sg_sp,sg_o,sg_F              ; 3 oF
-        .byte sg_4,sg_sp,sg_o,sg_F              ; 4 oF
+        .byte sg_3,sg_o,sg_F,sg_sp              ; 3oF
+        .byte sg_4,sg_o,sg_F,sg_sp              ; 4oF
         .byte sg_F,sg_U,sg_L,sg_L               ; FULL
         .byte sg_S,sg_S,sg_t,sg_r               ; SStr
         .byte sg_L,sg_S,sg_t,sg_r               ; LStr
