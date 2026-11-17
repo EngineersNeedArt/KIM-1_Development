@@ -3,10 +3,9 @@
 ;
 ; Original program: Robert "Bob" Leedom, KIM-1/6502 User Notes #16 (hex only).
 ; Disassembled/commented from the tapes bb_zero / bb_100 / bb_1780.
-; Assembles with ca65 (plain 6502) and the PAL-2 kim.inc / baseball.cfg (kim.cfg
-; plus a fourth area at $1780).  Identical to the tapes except that three
-; stray tape bytes outside the user area are dropped: $00EF (monitor PCL),
-; and $17E6-$17EF (the last is monitor RAM).
+; Assembles with ca65 (plain 6502) and the PAL-2 kim.inc. Identical to the 
+; tapes except that three stray tape bytes outside the user area are dropped: 
+; $00EF (monitor PCL), and $17E6-$17EF (the last is monitor RAM).
 ;
 ; How to play
 ;   Start at $0200.  Display: digit 0 (left) is the batter, digit 5 (right)
