@@ -2,7 +2,7 @@
 ; BASEBALL for the KIM-1  --  disassembly of the three paper tapes
 ;
 ; Original program: Robert "Bob" Leedom, KIM-1/6502 User Notes #16 (hex only).
-; Disassembled/commented from the tapes bb_zero / bb_100 / bb_1780.
+; Claude disassembled/commented from the tapes bb_zero / bb_100 / bb_1780.
 ; Assembles with ca65 (plain 6502) and the PAL-2 kim.inc. Identical to the 
 ; tapes except that three stray tape bytes outside the user area are dropped: 
 ; $00EF (monitor PCL), and $17E6-$17EF (the last is monitor RAM).
