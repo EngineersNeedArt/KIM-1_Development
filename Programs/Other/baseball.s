@@ -11,7 +11,7 @@
 ;   Start at $0200.  Display: digit 0 (left) is the batter, digit 5 (right)
 ;   is the pitcher; the ball crosses the display right to left as one lit
 ;   segment at low/middle/high height.
-;   Swing with "DA" while the ball is in the MIDDLE row on digit 0.
+;   Swing with "B" while the ball is in the MIDDLE row on digit 0.
 ;   Timing inside that frame picks the result: dead centre = HOMEr, then
 ;   triPLE, FLyout, douBLE, POPUP, SinGLE, FOUL at the edges.
 ;   play_mode ($2C): 0 = one-player batting practice (computer pitches, you bat
