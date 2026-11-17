@@ -1,6 +1,13 @@
 # Other Programs
 A handful of other small programs for the KIM-1, not from *The First Book of KIM*.
 
+## `baseball.s`
+As I understand it, *Baseball* was originally printed as just raw machine code in an old newsletter: [*6502 User Notes #16*](https://archive.org/details/6502-user-notes-issue-16). [Netzherpes](https://github.com/netzherpes) (Nils) worked from a rather poor scan to painstakingly get the bytes. Claude disassembled the hex to create workable assembly: `baseball.s`.
+
+In action:
+
+[![Video Title](https://img.youtube.com/vi/gssTtSw22BA/0.jpg)](https://www.youtube.com/watch?v=gssTtSw22BA)
+
 ## `blinken.s`
 I asked Claude to knock this one out after I saw `wave.s` and wondered why there wasn’t a “blinkenlights” program for the **KIM**. In fact, this felt almost like a “Hello World” for **KIM**.
 
