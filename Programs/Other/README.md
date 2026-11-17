@@ -4,6 +4,8 @@ A handful of other small programs for the KIM-1, not from *The First Book of KIM
 ## `baseball.s`
 As I understand it, *Baseball* was originally printed as just raw machine code in an old newsletter: [*6502 User Notes #16*](https://archive.org/details/6502-user-notes-issue-16). [Netzherpes](https://github.com/netzherpes) (Nils) worked from a rather poor scan to painstakingly get the bytes. Claude disassembled the hex to create workable assembly: `baseball.s`.
 
+*(In the comments at the top of the file, Claude had said that the "DA" key was used to swing the bat, I understand it to be the "B" key and so changed his comment.)*
+
 If you follow the link above to the original *User Notes* article, they describe how to make it a two-player game—with another person choosing the pitches. They also describe an easy hardware mod to allow the pitcher to select the pitch with a rotary switch or the batter to swing with a tethered pushbutton switch.
 
 In action:
