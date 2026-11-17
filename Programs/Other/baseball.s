@@ -2,16 +2,21 @@
 ; BASEBALL for the KIM-1  --  disassembly of the three paper tapes
 ;
 ; Original program: Robert "Bob" Leedom, KIM-1/6502 User Notes #16 (hex only).
-; Claude disassembled/commented from the tapes bb_zero / bb_100 / bb_1780.
-; Assembles with ca65 (plain 6502) and the kim.inc. Identical to the 
-; tapes except that three stray tape bytes outside the user area are dropped: 
-; $00EF (monitor PCL), and $17E6-$17EF (the last is monitor RAM).
+; Disassembled/commented from the tapes bb_zero / bb_100 / bb_1780.
+; Assembles with ca65 (plain 6502) and the kim.inc.  Identical to the tapes 
+; except that three stray tape bytes outside the user area are dropped: $00EF 
+; (monitor PCL), and $17E6-$17EF (the last is monitor RAM).
 ;
 ; How to play
 ;   Start at $0200.  Display: digit 0 (left) is the batter, digit 5 (right)
 ;   is the pitcher; the ball crosses the display right to left as one lit
 ;   segment at low/middle/high height.
+<<<<<<< Updated upstream
 ;   Swing with "B" while the ball is in the MIDDLE row on digit 0.
+=======
+;   Swing with the B key while the ball is in the MIDDLE row on digit 0.
+;   Hot keys while waiting: PC = scoreboard, + = score, GO = new game.
+>>>>>>> Stashed changes
 ;   Timing inside that frame picks the result: dead centre = HOMEr, then
 ;   triPLE, FLyout, douBLE, POPUP, SinGLE, FOUL at the edges.
 ;   play_mode ($2C): 0 = one-player batting practice (computer pitches, you bat
@@ -32,6 +37,15 @@
 ; ---------------------------------------------------------------------------
 
         .include "kim.inc"
+
+; Key codes as seen by this program.  The game runs in decimal mode (SED) and
+; GETKEY builds the key number with additions, so the codes come back
+; BCD-adjusted: key B (11) arrives as $11, PC (20) as $20, + (18) as $18,
+; GO (19) as $19.  These are NOT the binary codes in kim.inc (KEY_DA etc.).
+KEYD_B      = $11           ; swing
+KEYD_PLUS   = $18           ; show runs
+KEYD_GO     = $19           ; new game
+KEYD_PC     = $20           ; show scoreboard
 
 ; --- zero-page variables ---------------------------------------------------
 half        = $00           ; $0A = top ("A", visitors), $0B = bottom ("b")
@@ -454,7 +468,7 @@ next_frame:                             ; $02AC  ball moves one digit
 @scan:  jsr     scan_key                ; A = key
         ldx     swing
         bpl     @drawbat                ; already swung
-        cmp     #KEY_DA
+        cmp     #KEYD_B
         beq     @swing
         lda     ext_swing
         bpl     @drawbat
@@ -652,17 +666,18 @@ hex_to_seg:
         rts
 
 ; poll_hotkeys: one display scan plus key test.  Returns carry set.
-; NOTE: GETKEY never returns $20, $18 or $19, so as listed these three
-; "hot keys" (scoreboard, score, new game) can never fire.
+; Hot keys (decimal-mode codes, see KEYD_*): PC = scoreboard, + = score,
+; GO = new game.  A is not reloaded between the tests, and show_board /
+; show_runs clobber it, so at most one hot key is acted on per call.
 poll_hotkeys:
         jsr     scan_key
-        cmp     #$20
+        cmp     #KEYD_PC
         bne     @1
         jsr     show_board
-@1:     cmp     #$18
+@1:     cmp     #KEYD_PLUS
         bne     @2
         jsr     show_runs
-@2:     cmp     #$19
+@2:     cmp     #KEYD_GO
         bne     @3
         pla
         pla
