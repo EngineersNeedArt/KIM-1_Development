@@ -17,6 +17,9 @@ I asked Claude to knock this one out after I saw `wave.s` and wondered why there
 
 I would like to revisit the code in `blinken.s` to see if it can be made to be a nice introduction to modern 6502 assembly programming (on the **KIM-1**) in general.
 
+## `dungeon_dice.s`
+This little dice program came from [*COMPUTE!* magazine, (June, 1981)](https://archive.org/details/1981-06-compute-magazine). It will roll a 4, 6, 8, 10, 20 and 100-sided die when you press the 0, 1, 2, 3, 4 or 5 button. (Internally it uses *127 modulo n-sides*. This makes it **not** very fair for the dice that are not evenly divisible into 128.)
+
 ## `wave.s`
 I had seen this cute little program on various YouTube videos demonstrated as a kind of “Hello World”. When I tracked the code down, it seemed like a nice little addition to this collection. It really is a small program to test your **KIM-1** emulator/clone/original out with.
 
