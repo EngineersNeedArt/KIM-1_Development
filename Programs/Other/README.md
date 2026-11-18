@@ -1,7 +1,7 @@
 # Other Programs
 A handful of other small programs for the KIM-1, not from *The First Book of KIM*.
 
-## `baseball.s`
+### `baseball.s`
 As I understand it, *Baseball* was originally printed as just raw machine code in an old newsletter: [*6502 User Notes #16*](https://archive.org/details/6502-user-notes-issue-16). [Netzherpes](https://github.com/netzherpes) (Nils) worked from a rather poor scan to painstakingly get the bytes. Claude disassembled the hex to create workable assembly: `baseball.s`.
 
 *(In the comments at the top of the file, Claude had said that the "DA" key was used to swing the bat, I understand it to be the "B" key and so changed his comment.)*
@@ -12,18 +12,18 @@ In action:
 
 [![Video Title](https://img.youtube.com/vi/gssTtSw22BA/0.jpg)](https://www.youtube.com/watch?v=gssTtSw22BA)
 
-## `blinken.s`
+### `blinken.s`
 I asked Claude to knock this one out after I saw `wave.s` and wondered why there wasn’t a “blinkenlights” program for the **KIM**. In fact, this felt almost like a “Hello World” for **KIM**.
 
 I would like to revisit the code in `blinken.s` to see if it can be made to be a nice introduction to modern 6502 assembly programming (on the **KIM-1**) in general.
 
-## `dungeon_dice.s`
+### `dungeon_dice.s`
 This little dice program came from [*COMPUTE!* magazine, (June, 1981)](https://archive.org/details/1981-06-compute-magazine). It will roll a 4, 6, 8, 10, 20 and 100-sided die when you press the 0, 1, 2, 3, 4 or 5 button. (Internally it uses *127 modulo n-sides*. This makes it **not** very fair for the dice that are not evenly divisible into 128.)
 
-## `wave.s`
+### `wave.s`
 I had seen this cute little program on various YouTube videos demonstrated as a kind of “Hello World”. When I tracked the code down, it seemed like a nice little addition to this collection. It really is a small program to test your **KIM-1** emulator/clone/original out with.
 
-## `yaht-c.s`
+### `yaht-c.s`
 With the success of `blinken.s` (above), I spent several days iterating with Claude on a Yahtzee-like game (a game played with 5 dice with poker-like scoring). The game is a classic and seemed like a natural fit for the **KIM-1** (for which I had not yet seen such a game).
 
 I was surprised at the adroitness (?) Claude showed in managing the code for the few pages of memory allowed, Claude’s testing thousands of simulated games to determine the most fair scoring strategy, etc. Oh, and the game is frankly one of the more fun ones I've played so far.
